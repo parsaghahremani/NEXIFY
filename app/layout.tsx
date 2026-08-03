@@ -20,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" dir="rtl">
-      <body className={vazirmatn.className}>{children}</body>
+      <body className={`${vazirmatn.className} flex min-h-dvh flex-col`}>
+        {children}
+      </body>
     </html>
   );
 }
