@@ -110,7 +110,8 @@ const itemVariants = {
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [closeHint, setCloseHint] = useState(false);
-
+ 
+  
     useEffect(() => {
   if (!isMenuOpen) return;
 
@@ -134,34 +135,38 @@ export default function Header() {
     <>
     <header
   id="home"
-  className="mx-auto mt-[18px] grid select-none h-[73px] w-[calc(100%-3.25rem)] md:w-[calc(100%-9rem)] lg:w-[calc(100%-80px)] sm:w-[calc(100%-5rem)] max-w-[1200px] grid-cols-[auto_1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center rounded-full border border-white/10 px-5 shadow-sm backdrop-blur-md "style={{ backgroundColor: "rgba(0, 96, 172, 0.3)" }}
+  className="mx-auto mt-[18px] grid select-none h-[73px] w-[calc(100%-3.25rem)] md:w-[calc(100%-5rem)] lg:w-[calc(100%-80px)] sm:w-[calc(100%-5rem)] max-w-[1200px] grid-cols-[auto_1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center rounded-full border border-white/10 px-5 shadow-sm backdrop-blur-md "style={{ backgroundColor: "rgba(0, 96, 172, 0.3)" }}
 >
    
 
       <div className="justify-self-start shrink-0">
-        <a
-          href="#start-project"
-          className="hidden lg:flex group h-[43px] shadow-[0_8px_30px_#3083BA] shrink-0 items-center gap-[5px] rounded-full bg-[rgba(66,126,186,0.93)] px-5 text-[13px] font-bold text-white transition-all duration-300"
-        >
-          <svg
-            width="12"
-            height="9"
-            viewBox="0 0 12 9"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="transition-transform duration-300 ease-in-out group-hover:translate-x-1"
-            aria-hidden="true"
-          >
-            <path
-              d="M1 4.5H11M11 4.5L7.5 1M11 4.5L7.5 8"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <span className="whitespace-nowrap">شروع پروژه</span>
-        </a>
+        <Link
+  href="/start-project"
+  className="hidden lg:flex group h-[43px] shadow-[0_8px_30px_#3083BA] shrink-0 items-center gap-[5px] rounded-full bg-[rgba(66,126,186,0.93)] px-5 text-[14px] font-bold text-white transition-all duration-300"
+>
+  <svg
+    width="12"
+    height="9"
+    viewBox="0 0 12 9"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className="transition-transform duration-300 ease-in-out group-hover:translate-x-1"
+    aria-hidden="true"
+  >
+    <path
+      d="M1 4.5H11M11 4.5L7.5 1M11 4.5L7.5 8"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+
+  <span className="whitespace-nowrap">
+    شروع پروژه
+  </span>
+
+</Link>
 
 
 
@@ -289,7 +294,14 @@ aria-expanded={isMenuOpen}
 
   {/* Overlay */}
 <motion.div
-  className="absolute inset-0 bg-black/45"
+  className="
+    absolute
+    inset-0
+    bg-black/45
+     backdrop-blur-[4px]
+
+     
+  "
   onClick={() => {
     if (closeHint) return;
 
@@ -301,18 +313,15 @@ aria-expanded={isMenuOpen}
   }}
   initial={{
     opacity: 0,
-    backdropFilter: "blur(0px)",
   }}
   animate={{
     opacity: 1,
-    backdropFilter: "blur(6px)",
   }}
   exit={{
     opacity: 0,
-    backdropFilter: "blur(0px)",
   }}
   transition={{
-    duration: 0.3,
+    duration: 1,
     ease: [0.22, 1, 0.36, 1],
   }}
 />
