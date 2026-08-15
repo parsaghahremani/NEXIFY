@@ -1,23 +1,26 @@
 import ContactCard from "./ContactCard";
+import Link from "next/link";
 
 export default function Contact() {
   return (
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="relative mx-auto w-full max-w-[1200px] px-5 pt-14 pb-0 sm:px-8 lg:px-0"
+      className="relative mx-auto w-full  max-w-[1200px] px-5 pt-14 pb-0 sm:px-8 lg:px-0"
     >
       {/* مسیر صفحه (Breadcrumb) — قرص‌شکل، با سایه، سمت چپ */}
       <nav
         aria-label="مسیر صفحه"
         className="mb-16 flex w-fit items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-sm text-[#1F3B57]/80 shadow-[0_8px_24px_rgba(0,96,172,0.12)] backdrop-blur-md [direction:rtl] ms-auto"
       >
-        <a
-          href="#home"
+        
+        <Link
+          href="/"
           className="transition-colors duration-300 hover:text-[#0060AC]"
         >
-          خانه
-        </a>
+            خانه
+        </Link>
+
         <span aria-hidden="true" className="text-[#1F3B57]/40">
           &lsaquo;
         </span>
