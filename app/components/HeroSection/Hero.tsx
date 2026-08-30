@@ -4,8 +4,13 @@ import Link from "next/link";
 
 const laptopImage = "/LapTopHero.webp";
 
+function scrollToGetStarted(e: React.MouseEvent) {
+  e.preventDefault();
+  const section = document.getElementById("GetStarted");
+  if (!section) return;
 
-
+  section.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 function scrollToServices() {
   const section = document.getElementById("Services");
@@ -13,8 +18,6 @@ function scrollToServices() {
 
   section.scrollIntoView({ behavior: "smooth", block: "start" });
 }
-
-
 
 const sparkles = [
   { left: "18%", top: "18%", opacity: 0.55 },
@@ -135,41 +138,38 @@ function HeroActions({ variant }: { variant: HeroVariant }) {
           : "mt-[23px] flex mr-auto ml-[59px] w-fit flex-row-reverse items-center justify-start gap-[30px]"
       }
     >
+      {/* ۲. دکمه آیکون شیشه‌ای و متن برو پایین */}
+      {/* ۲. دکمه آیکون شیشه‌ای و متن برو پایین */}
+      <div className="flex items-center xl:ml-[95px] lg:ml-[90px] text-[#123E61] gap-1.5">
+        {/* آیکون دایره‌ای شیشه‌ای کاملاً تمیز بدون باگ کادر مستطیلی */}
+        <div
+          onClick={scrollToServices}
+          className="relative flex h-[44px] w-[44px] items-center cursor-pointer justify-center rounded-full border-2 border-white/40 bg-gradient-to-br from-white/70 via-[#7C5CFF]/15 to-white/10 backdrop-blur-md shadow-[0_4px_25px_rgba(0,0,0,0.4)] transition-transform duration-300 hover:scale-105"
+        >
+          {/* حلقه داخلی و فلش رو به پایین */}
+          <div className="flex h-[32px] w-[32px] items-center justify-center rounded-full border-2 border-[#123E61]">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 1.5V10.5M10 6.5L6 10.5L2 6.5"
+                stroke="#123E61"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
 
-
-
-         {/* ۲. دکمه آیکون شیشه‌ای و متن برو پایین */}
-{/* ۲. دکمه آیکون شیشه‌ای و متن برو پایین */}
-<div className="flex items-center xl:ml-[95px] lg:ml-[90px] text-[#123E61] gap-1.5"> 
-  {/* آیکون دایره‌ای شیشه‌ای کاملاً تمیز بدون باگ کادر مستطیلی */}
-  <div
-    onClick={scrollToServices}
-    className="relative flex h-[44px] w-[44px] items-center cursor-pointer justify-center rounded-full border-2 border-white/40 bg-gradient-to-br from-white/70 via-[#7C5CFF]/15 to-white/10 backdrop-blur-md shadow-[0_4px_25px_rgba(0,0,0,0.4)] transition-transform duration-300 hover:scale-105"
-  >
-    {/* حلقه داخلی و فلش رو به پایین */}
-    <div className="flex h-[32px] w-[32px] items-center justify-center rounded-full border-2 border-[#123E61]">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M6 1.5V10.5M10 6.5L6 10.5L2 6.5" stroke="#123E61" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    </div>
-  </div>
-
-  <span className="hidden whitespace-nowrap text-[16px] font-medium text-[#123E61] md:inline-block">
-    برو پایین
-  </span>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-   
+        <span className="hidden whitespace-nowrap text-[16px] font-medium text-[#123E61] md:inline-block">
+          برو پایین
+        </span>
+      </div>
     </div>
   );
 }
@@ -242,97 +242,110 @@ function DesktopLikeHero({
 export default function Hero() {
   return (
     <>
-    <section
-      id="home"
-      aria-labelledby="hero-title-desktop"
-      className="relative mt-[52px] sm:mt-[48px] 2xl:pb-10 xl:pb-10 lg:mt-[100px] xl:mt-[100px]"
-    >
-      {/* نسخه موبایل و تبلت — بدون تغییر */}
-      <div className="mx-auto flex w-[calc(100%-3.25rem)] justify-center sm:w-[calc(100%-5rem)] lg:hidden">
-        <h1 className="text-center text-[20px] md:text-[27px] font-normal leading-[1.65] text-[#4982BC] sm:mb-[5px] sm:text-[24px]">
-          <span className="block">
-            از طراحی سایت تا تولید محتوا، از گرافیک تا امنیت؛
-          </span>
-
-          <span className="mt-1 block">
-            همراه مطمئن کسب و کار شما در دنیای دیجیتال.
-          </span>
-        </h1>
-      </div>
-
-      <div
-        dir="rtl"
-        className="relative mx-auto mb-[30px] mt-10 flex min-h-[100px] w-full max-w-[330px] md:max-w-[500px] -rotate-[5.82deg] flex-col items-center justify-center gap-[4px] rounded-[14px] border-[2px] border-[#00E5FF] bg-[linear-gradient(135deg,rgba(0,229,255,0.25)_0%,rgba(124,92,255,0.25)_100%)] shadow-[0_12px_32px_rgba(0,229,255,0.24)] backdrop-blur-[14px] sm:max-w-[435px] lg:hidden"
+      <section
+        id="home"
+        aria-labelledby="hero-title-desktop"
+        className="relative mt-[52px] sm:mt-[48px] 2xl:pb-10 xl:pb-10 lg:mt-[100px] xl:mt-[100px]"
       >
-        <div className="flex rotate-[5.82deg] flex-col items-center">
-          <span className="text-[25px] font-extrabold leading-none tracking-[0.18em] text-[#4982BC] sm:text-[26px]">
-            NEXIFY
-          </span>
+        {/* نسخه موبایل و تبلت — بدون تغییر */}
+        <div className="mx-auto flex w-[calc(100%-3.25rem)] justify-center sm:w-[calc(100%-5rem)] lg:hidden">
+          <h1 className="text-center text-[20px] md:text-[27px] font-normal leading-[1.65] text-[#4982BC] sm:mb-[5px] sm:text-[24px]">
+            <span className="block">
+              از طراحی سایت تا تولید محتوا، از گرافیک تا امنیت؛
+            </span>
 
-          <span className="mt-[5px] md:mt-[12px] text-[15px] font-medium leading-none text-[#4982BC] sm:text-[17px]">
-            همراه شما تا پایان پروژه
-          </span>
+            <span className="mt-1 block">
+              همراه مطمئن کسب و کار شما در دنیای دیجیتال.
+            </span>
+          </h1>
         </div>
-      </div>
 
+        <div
+          dir="rtl"
+          className="relative mx-auto mb-[30px] mt-10 flex min-h-[100px] w-full max-w-[330px] md:max-w-[500px] -rotate-[5.82deg] flex-col items-center justify-center gap-[4px] rounded-[14px] border-[2px] border-[#00E5FF] bg-[linear-gradient(135deg,rgba(0,229,255,0.25)_0%,rgba(124,92,255,0.25)_100%)] shadow-[0_12px_32px_rgba(0,229,255,0.24)] backdrop-blur-[14px] sm:max-w-[435px] lg:hidden"
+        >
+          <div className="flex rotate-[5.82deg] flex-col items-center">
+            <span className="text-[25px] font-extrabold leading-none tracking-[0.18em] text-[#4982BC] sm:text-[26px]">
+              NEXIFY
+            </span>
 
+            <span className="mt-[5px] md:mt-[12px] text-[15px] font-medium leading-none text-[#4982BC] sm:text-[17px]">
+              همراه شما تا پایان پروژه
+            </span>
+          </div>
+        </div>
 
+        {/* کانتینر اصلی فقط برای تبلت - عرض کامل و وسط‌چین */}
+        <div className="mt-8 flex w-full flex-col items-center justify-center md:gap-5 gap-[7px] md:mt-[45px]  md:flex-row lg:hidden">
+          {/* ۱. دکمه آبی‌رنگ شروع پروژه */}
+          <Link
+            href="#GetStarted"
+            onClick={scrollToGetStarted}
+            className="flex h-[50px] w-[160px] group items-center justify-center gap-[6px] rounded-full bg-[rgba(66,126,186,0.93)] text-[14px] font-bold text-white shadow-[0_8px_30px_#3083BA] transition-all duration-300 hover:opacity-95"
+          >
+            <svg
+              width="12"
+              className="transition-transform duration-300 ease-in-out group-hover:translate-x-1"
+              height="9"
+              viewBox="0 0 12 9"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 4.5H11M11 4.5L7.5 1M11 4.5L7.5 8"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span className="whitespace-nowrap ">شروع پروژه</span>
+          </Link>
 
+          {/* ۲. دکمه آیکون شیشه‌ای و متن برو پایین */}
+          <div className="flex items-center gap-[6px]">
+            {/* آیکون دایره‌ای شیشه‌ای کاملاً تمیز بدون باگ کادر مستطیلی */}
+            <div
+              onClick={scrollToServices}
+              className="relative flex h-[44px] w-[44px] items-center cursor-pointer justify-center rounded-full border-2 border-white/40 bg-gradient-to-br from-white/70 via-[#7C5CFF]/15 to-white/10 backdrop-blur-md shadow-[0_4px_25px_rgba(0,0,0,0.4)] transition-transform duration-300 hover:scale-105"
+            >
+              {/* حلقه داخلی و فلش رو به پایین */}
+              <div className="flex h-[32px] w-[32px] items-center justify-center rounded-full border-2 border-[#123E61]">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 1.5V10.5M10 6.5L6 10.5L2 6.5"
+                    stroke="#123E61"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
 
-   
+            <span className="text-[16px] font-medium text-[#123E61] whitespace-nowrap hidden md:inline-block lg:hidden">
+              برو پایین
+            </span>
+          </div>
+        </div>
 
-{/* کانتینر اصلی فقط برای تبلت - عرض کامل و وسط‌چین */}
-<div className="mt-8 flex w-full flex-col items-center justify-center md:gap-5 gap-[7px] md:mt-[45px]  md:flex-row lg:hidden">
-  
-  {/* ۱. دکمه آبی‌رنگ شروع پروژه */}
-  <Link
-    href="/start-project"
-    className="flex h-[50px] w-[160px] group items-center justify-center gap-[6px] rounded-full bg-[rgba(66,126,186,0.93)] text-[14px] font-bold text-white shadow-[0_8px_30px_#3083BA] transition-all duration-300 hover:opacity-95"
-  >
-    <svg width="12" className="transition-transform duration-300 ease-in-out group-hover:translate-x-1" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M1 4.5H11M11 4.5L7.5 1M11 4.5L7.5 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-    <span className="whitespace-nowrap ">شروع پروژه</span>
-  </Link>
+        {/* نسخه لپ‌تاپ */}
+        <div className="relative hidden min-h-[478px] w-full lg:block xl:hidden">
+          <DesktopLikeHero titleId="hero-title-laptop" variant="laptop" />
+        </div>
 
-  {/* ۲. دکمه آیکون شیشه‌ای و متن برو پایین */}
-  <div className="flex items-center gap-[6px]"> 
-    {/* آیکون دایره‌ای شیشه‌ای کاملاً تمیز بدون باگ کادر مستطیلی */}
-    <div onClick={scrollToServices} className="relative flex h-[44px] w-[44px] items-center cursor-pointer justify-center rounded-full border-2 border-white/40 bg-gradient-to-br from-white/70 via-[#7C5CFF]/15 to-white/10 backdrop-blur-md shadow-[0_4px_25px_rgba(0,0,0,0.4)] transition-transform duration-300 hover:scale-105">
-      {/* حلقه داخلی و فلش رو به پایین */}
-      <div className="flex h-[32px] w-[32px] items-center justify-center rounded-full border-2 border-[#123E61]">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 1.5V10.5M10 6.5L6 10.5L2 6.5" stroke="#123E61" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </div>
-    </div>
-
-    <span className="text-[16px] font-medium text-[#123E61] whitespace-nowrap hidden md:inline-block lg:hidden">
-      برو پایین
-    </span>
-  </div>
-
-</div>
-
-
-
-
-
-
-      {/* نسخه لپ‌تاپ */}
-      <div className="relative hidden min-h-[478px] w-full lg:block xl:hidden">
-        <DesktopLikeHero titleId="hero-title-laptop" variant="laptop" />
-      </div>
-
-      {/* نسخه دسکتاپ — بدون تغییر */}
-      <div className="relative mx-auto hidden min-h-[478px] w-full max-w-[1280px] xl:block">
-        <DesktopLikeHero titleId="hero-title-desktop" variant="desktop" />
-      </div>
-
-   
-
-    </section>
-        <div className="mx-auto 2xl:h-[20px] xl:h-[20px] lg:h-[20px] md:h-[20px] sm:h-[12px] h-[9px] w-[80%] 2xl:w-[65%] xl:w-[90%] lg:w-[90%] md:w-[90%] sm:w-[80%] rounded-full mt-[12px] sm:mt-3 md:mt-[32px] lg:mt-[46px] bg-[#A2C3DA] shadow-none md:shadow-[0_7px_17px_rgba(0,0,0,0.5)]"/>
-        </>
+        {/* نسخه دسکتاپ — بدون تغییر */}
+        <div className="relative mx-auto hidden min-h-[478px] w-full max-w-[1280px] xl:block">
+          <DesktopLikeHero titleId="hero-title-desktop" variant="desktop" />
+        </div>
+      </section>
+      <div className="mx-auto 2xl:h-[20px] xl:h-[20px] lg:h-[20px] md:h-[20px] sm:h-[12px] h-[9px] w-[80%] 2xl:w-[65%] xl:w-[90%] lg:w-[90%] md:w-[90%] sm:w-[80%] rounded-full mt-[12px] sm:mt-3 md:mt-[32px] lg:mt-[46px] bg-[#A2C3DA] shadow-none md:shadow-[0_7px_17px_rgba(0,0,0,0.5)]" />
+    </>
   );
 }

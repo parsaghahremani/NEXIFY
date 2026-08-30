@@ -1,13 +1,27 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
 import Logo from "../shared/logo";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
 type FieldProps = {
   id: string;
   label: string;
   placeholder: string;
   type?: string;
+  value: string;
+  onChange: (value: string) => void;
 };
 
-function Field({ id, label, placeholder, type = "text" }: FieldProps) {
+function Field({
+  id,
+  label,
+  placeholder,
+  type = "text",
+  value,
+  onChange,
+}: FieldProps) {
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor={id} className="text-sm font-bold text-[#123E61]">
@@ -17,6 +31,8 @@ function Field({ id, label, placeholder, type = "text" }: FieldProps) {
         id={id}
         name={id}
         type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         dir={
           type === "tel" ||
           type === "email" ||
@@ -36,11 +52,21 @@ type InfoRowProps = {
   icon: React.ReactNode;
   label: string;
   value: React.ReactNode;
+  href?: string;
+  external?: boolean;
+  onClick?: () => void;
 };
 
-function InfoRow({ icon, label, value }: InfoRowProps) {
-  return (
-    <div className="flex items-center justify-between gap-4 rounded-2xl bg-white/45 px-5 py-4">
+function InfoRow({
+  icon,
+  label,
+  value,
+  href,
+  external,
+  onClick,
+}: InfoRowProps) {
+  const content = (
+    <>
       <div>
         <p className="text-sm font-bold text-[#123E61]">{label}</p>
         <p className="mt-1 text-sm text-[#123E61]/70 [direction:ltr] text-right">
@@ -50,8 +76,44 @@ function InfoRow({ icon, label, value }: InfoRowProps) {
       <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0060AC]/10 text-[#0060AC]">
         {icon}
       </span>
-    </div>
+    </>
   );
+
+  const rowClass =
+    "flex items-center justify-between gap-4 rounded-2xl bg-white/45 px-5 py-4 transition-colors hover:bg-white/65 text-right w-full";
+
+  // اگه لینک (href) داشت -> با تگ <a> رندر می‌شه (برای تلفن/اینستا/تلگرام)
+  if (href) {
+    return (
+      <a
+        href={href}
+        onClick={onClick}
+        target={external ? "_blank" : undefined}
+        rel={external ? "noopener noreferrer" : undefined}
+        className={rowClass}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  // اگه فقط onClick داشت بدون href -> دکمه (برای کپی ایمیل)
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={rowClass}>
+        {content}
+      </button>
+    );
+  }
+
+  // حالت عادی بدون کلیک (برای ساعات کاری)
+  return <div className={rowClass}>{content}</div>;
+}
+
+function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text).catch((err) => {
+    console.error("Copy failed:", err);
+  });
 }
 
 const iconProps = {
@@ -114,7 +176,63 @@ const ArrowLeftIcon = () => (
   </svg>
 );
 
+interface ContactFormData {
+  fullName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+}
+
+const initialFormData: ContactFormData = {
+  fullName: "",
+  email: "",
+  phone: "",
+  subject: "",
+  message: "",
+};
+
+type SubmitStatus = "idle" | "loading" | "success" | "error";
+
 export default function ContactCard() {
+  const [formData, setFormData] = useState<ContactFormData>(initialFormData);
+  const [status, setStatus] = useState<SubmitStatus>("idle");
+
+  function updateField<K extends keyof ContactFormData>(
+    field: K,
+    value: ContactFormData[K],
+  ) {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setStatus((prev) =>
+      prev === "success" || prev === "error" ? "idle" : prev,
+    );
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setStatus("loading");
+
+    try {
+      const response = await fetch(`${API_URL}/contact/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Request failed");
+      }
+
+      setStatus("success");
+      setFormData(initialFormData);
+    } catch (error) {
+      console.error("Contact form submit error:", error);
+      setStatus("error");
+    }
+  }
+
+  const isLoading = status === "loading";
+
   return (
     <div
       dir="rtl"
@@ -130,14 +248,33 @@ export default function ContactCard() {
             </span>
           </div>
 
-          <InfoRow icon={<PhoneIcon />} label="تلفن" value="03933330000" />
-          <InfoRow icon={<MailIcon />} label="ایمیل" value="info@nexify.ir" />
+          <InfoRow
+            icon={<PhoneIcon />}
+            label="تلفن"
+            value="09047351704"
+            href="tel:09047351704"
+            onClick={() => copyToClipboard("09047351704")}
+          />
+          <InfoRow
+            icon={<MailIcon />}
+            label="ایمیل"
+            value="nexify.t6@gmail.com"
+            onClick={() => copyToClipboard("nexify.t6@gmail.com")}
+          />
           <InfoRow
             icon={<InstagramIcon />}
             label="اینستاگرام"
-            value="nexify@"
+            value="neexify_team"
+            href="https://instagram.com/neexify_team"
+            external
           />
-          <InfoRow icon={<TelegramIcon />} label="تلگرام" value="nexify@" />
+          <InfoRow
+            icon={<TelegramIcon />}
+            label="تلگرام"
+            value="Nexify_team"
+            href="https://t.me/Nexify_team"
+            external
+          />
           <InfoRow
             icon={<ClockIcon />}
             label="ساعات کاری"
@@ -152,7 +289,11 @@ export default function ContactCard() {
         </div>
 
         {/* فرم ارسال پیام */}
-        <form className="flex flex-col gap-5 pt-10 md:border-r md:border-[#123E61]/15 md:pt-0 md:ps-10">
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="flex flex-col gap-5 pt-10 md:border-r md:border-[#123E61]/15 md:pt-0 md:ps-10"
+        >
           <div className="mb-2 flex items-center gap-2">
             <h2 className="text-2xl font-bold text-[#123E61]">ارسال پیام</h2>
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0060AC]/10 text-[#0060AC]">
@@ -164,18 +305,26 @@ export default function ContactCard() {
             id="fullName"
             label="نام و نام خانوادگی"
             placeholder="نام و نام خانوادگی خود را وارد کنید."
+            value={formData.fullName}
+            onChange={(v) => updateField("fullName", v)}
           />
           <Field
             id="email"
             label="ایمیل"
             placeholder="ایمیل خود را وارد کنید."
             type="email"
+            value={formData.email}
+            onChange={(v) => updateField("email", v)}
           />
           <Field
             id="phone"
             label="شماره تلفن"
             placeholder="شماره تلفن خود را وارد کنید."
             type="tel"
+            value={formData.phone}
+            onChange={(v) =>
+              updateField("phone", v.replace(/[^0-9]/g, "").slice(0, 11))
+            }
           />
 
           <div className="flex flex-col gap-2">
@@ -188,7 +337,8 @@ export default function ContactCard() {
             <select
               id="subject"
               name="subject"
-              defaultValue=""
+              value={formData.subject}
+              onChange={(e) => updateField("subject", e.target.value)}
               className="rounded-xl border border-[#123E61]/10 bg-white/55 px-4 py-3 text-sm text-[#123E61]/70 outline-none transition-colors focus:border-[#0060AC]/50"
             >
               <option value="" disabled>
@@ -211,6 +361,8 @@ export default function ContactCard() {
               id="message"
               name="message"
               rows={5}
+              value={formData.message}
+              onChange={(e) => updateField("message", e.target.value)}
               placeholder="پیام خود را وارد کنید..."
               className="resize-none rounded-xl border border-[#123E61]/10 bg-white/55 px-4 py-3 text-sm text-[#123E61] placeholder:text-[#123E61]/45 outline-none transition-colors focus:border-[#0060AC]/50"
             />
@@ -218,11 +370,23 @@ export default function ContactCard() {
 
           <button
             type="submit"
-            className="mt-2 flex w-fit items-center gap-2 rounded-full bg-[#427EBA] px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(66,126,186,0.4)] transition-transform hover:scale-[1.02]"
+            disabled={isLoading}
+            className="mt-2 flex w-fit items-center gap-2 rounded-full bg-[#427EBA] px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(66,126,186,0.4)] transition-transform hover:scale-[1.02] disabled:opacity-60"
           >
-            ارسال پیام
+            {isLoading ? "در حال ارسال..." : "ارسال پیام"}
             <ArrowLeftIcon />
           </button>
+
+          {status === "success" && (
+            <p className="text-sm font-medium text-green-700">
+              پیام شما با موفقیت ارسال شد.
+            </p>
+          )}
+          {status === "error" && (
+            <p className="text-sm font-medium text-red-600">
+              مشکلی در ارسال پیام پیش اومد. لطفاً دوباره تلاش کنید.
+            </p>
+          )}
         </form>
       </div>
 
