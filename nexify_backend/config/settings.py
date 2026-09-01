@@ -158,3 +158,15 @@ else:
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@nexify.dev")
 # ایمیلی که پیام‌های تماس بهش اطلاع‌رسانی می‌شه (ایمیل خودتون/تیم پشتیبانی)
 CONTACT_NOTIFICATION_EMAIL = os.getenv("CONTACT_NOTIFICATION_EMAIL", "info@nexify.ir")
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    admin.site.urls,
+    # مسیر قبلی تماس با ما
+    path('api/contact/', include('contact.urls')), 
+    
+    # مسیر جدید برای شروع پروژه
+    path('api/project-request/', include('project_requests.urls')),
+]
